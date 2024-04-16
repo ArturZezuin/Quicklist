@@ -219,6 +219,6 @@ searchInput.addEventListener('keyup', function(e) {
                         }
                     });
                 }
-            }, 1000);
+            }, 500);
     }
 });
