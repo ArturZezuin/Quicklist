@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='ico/favicon.ico') }}">
+    <title>Sho-list</title>
+</head>
+<body class="h-100">
+    {% import "macros.html" as _macros %}
+    <div class="container h-100 p-2">
+        <div class="card border-secondary shadow h-100">
+            <div class="card-header p-2 d-flex">
+                <div class="flex-grow-1">
+                    {% block title %}{% endblock %}
+                </div>
+                <div>
+                    {% block btn %}{% endblock %}
+                </div>
+            </div>
+            <div class="card-body p-2 overflow-scroll">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="card-footer p-2">
+                {% block footer %}{% endblock %}    
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    {% block scripts %}{% endblock %}  
+</body>
+</html>
