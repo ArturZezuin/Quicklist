@@ -106,11 +106,9 @@ listItems.onclick = function(e) {
 }
 
 textlistName.onchange = function() {
-    if (textlistName.value.length() == 0 ) {
-
-        return;   
-    }  
-    fetch('/change_list_name/' + list_id + '/' + textlistName.value);   
+    let newName = textlistName.value;
+    if (newName.length == 0 ) newName = 'New list'; 
+    fetch('/change_list_name/' + list_id + '/' + newName);   
 }
 
 checkboxShowMarked.onchange = function() {
@@ -179,6 +177,8 @@ function addItemToOfferList(textContent, dbItemID){
     listOffers.appendChild(div);  
     listOffersWrapper.style.display = "block";  
 }
+
+textlistName
 
 searchInput.addEventListener('keyup', function(e) {
     if (searchInput.value.trim() == '') clearOfferList();
