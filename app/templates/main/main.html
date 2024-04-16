@@ -11,7 +11,8 @@
 {% block content %}
     <div class="container p-0" id="listItemsWrapper">
         <div class="list-group list-group-flush" id="listItems">
-        {% if lists %}
+        
+            {% if lists %}
         {% for slist in lists %}
             <div class="list-group-item" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
                 <div class="d-flex">
@@ -25,6 +26,7 @@
             </div>
         {% endfor %}
         {% endif %}
+        
         </div>
     </div>
 {% endblock %}
