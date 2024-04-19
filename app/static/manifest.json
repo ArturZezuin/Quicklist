@@ -3,7 +3,7 @@
   "name": "Gluon list",
   "icons": [
     {
-      "src": "static/ico/gluon.png",
+      "src": "/static/ico/gluon.png",
       "type": "image/png",
       "sizes": "192x192"
     }
