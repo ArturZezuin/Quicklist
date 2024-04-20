@@ -10,11 +10,11 @@
 </head>
 
     {% import "macros.html" as _macros %}
-    <div class="sticky-top bg-success p-2">
+    <div class="fixed-top bg-success p-2">
         {% block title %}{% endblock %}
     </div>
 
-    <div class="overflow-scroll">
+    <div class="position-relative overflow-scroll">
         {% block content %}{% endblock %}
     </div>
 
