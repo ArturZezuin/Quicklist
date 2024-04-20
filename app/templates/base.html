@@ -8,20 +8,18 @@
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <title>Sho-list</title>
 </head>
-<body class="h-100">
+
     {% import "macros.html" as _macros %}
-    <div class="container h-100 p-0">
-        <div class="card h-100 border-0">
-            <div class="card-header rounded-0 p-2 bg-success">
-                {% block title %}{% endblock %}
-            </div>
-            <div class="card-body p-2 overflow-scroll">
-                {% block content %}{% endblock %}
-            </div>
-            <div class="card-footer p-2 rounded-0">
-                {% block footer %}{% endblock %}    
-            </div>
-        </div>
+    <div class="sticky-top bg-success p-2">
+        {% block title %}{% endblock %}
+    </div>
+
+    <div class="overflow-scroll">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="fixed-bottom p-2">
+        {% block footer %}{% endblock %}
     </div>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     {% block scripts %}{% endblock %}  
