@@ -1,31 +1,21 @@
 {% extends "base.html" %}
 
 {% block title %}
-<div class="container p-0 m-0">
-    <input type="text" class="form-control" placeholder="list name" id="textlistName" value="{{ cur_list.name }}">
+<div class="d-flex">
+    <a class="btn px-1 text-white" href="{{ url_for('main.index') }}">{{ _macros.icon_arrow_left("24", "24") }}</a>
+    <div class="flex-grow-1 px-2"><input type="text" class="form-control rounded-4 border-0" placeholder="list name" id="textlistName" value="{{ cur_list.name }}"></div>
+    <div class="btn px-1 text-white" id="btnSettings">{{ _macros.icon_justify("24", "24") }}</div>
 </div>
-{% endblock %}
-
-{% block btn %}
-    <a class="btn btn-outline-secondary" href="{{ url_for('main.index') }}" style="margin-left: 10px;">Save</a>
+<div class="container text-white mt-2 px-5" style="display: none;" id="blockSettings">
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="checkboxShowMarked">
+        <label class="form-check-label" for="checkboxShowMarked">Show marked</label>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
 <script>const list_id = "{{ cur_list.id }}"</script>
-<div class="input-group">
-    <input type="text" class="form-control" placeholder="Start typing here" aria-label="Start typing here" id="searchInput" aria-describedby="btnGroupAddon">
-</div>
-
-<div class="container px-0 my-2" id="listOffersWrapper" style="display: none;">
-    <div class="list-group shadow" id="listOffers"></div>
-</div>
-
-<div id="messageToast" class="toast text-bg-info my-2 w-100" role="alert" aria-live="assertive" aria-atomic="true">
-  <div class="d-flex">
-    <div id="messageToastText" class="toast-body"></div>
-    <button type="button" class="btn-close btn-close-black me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-  </div>
-</div>
 
 <div class="container p-0" id="listItemsWrapper">
     <div class="list-group list-group-flush" id="listItems">
@@ -39,7 +29,7 @@
                     <label role="button" class="form-check-label" for="listCheckbox-{{ list_item.item.id }}">{{ list_item.item.name }}</label>
                 </div>
                 <div role="button" class="deleteListItem">
-                    {{ _macros.icon_delete("16", "16") }} 
+                    {{ _macros.icon_delete("24", "24") }} 
                 </div>
             </div>
         </div>
@@ -50,13 +40,19 @@
 {% endblock %}
 
 {% block footer %}
-<div class="d-flex">
-    <div class="form-check form-switch flex-grow-1">
-        <input class="form-check-input" type="checkbox" role="switch" id="checkboxShowMarked">
-        <label class="form-check-label" for="checkboxShowMarked">Show marked</label>
-    </div>
-    <div class="px-2" id="allItems">All items: 0</div>
+
+<div id="messageToast" class="toast text-bg-danger mb-2 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div id="messageToastText" class="toast-body px-2 py-1 text-white"></div>
+    <button type="button" class="btn-close btn-close-black me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
 </div>
+
+<div class="container px-0 mb-2" id="listOffersWrapper" style="display: none;">
+    <div class="list-group" id="listOffers"></div>
+</div>
+
+<input type="text" class="form-control rounded-4 border-0 flex-grow-1" placeholder="Start typing here" aria-label="Start typing here" id="searchInput" aria-describedby="btnGroupAddon">
 {% endblock %}  
 
 {% block scripts %}
