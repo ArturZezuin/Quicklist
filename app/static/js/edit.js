@@ -181,8 +181,6 @@ function addItemToOfferList(textContent, dbItemID){
     listOffersWrapper.style.display = "block";  
 }
 
-textlistName
-
 searchInput.addEventListener('keyup', function(e) {
     if (searchInput.value.trim() == '') clearOfferList();
     
