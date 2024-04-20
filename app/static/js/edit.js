@@ -106,6 +106,7 @@ listItems.onclick = function(e) {
 }
 
 btnSettings.onclick = function() {
+    alert(blockSettings.style.display);
     blockSettings.style.display = (blockSettings.style.display == "none") ? "block" : "none";
 }
 
