@@ -37,7 +37,7 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
         
-        login_user(user=user)
+        login_user(user=user, remember=True) # always remember me :)
         return redirect(url_for('main.index'))
     
     return render_template('auth/login.html', form=form)
