@@ -10,18 +10,16 @@
 </head>
 <body>
     {% import "macros.html" as _macros %}
-    <header>
-        <div class="position-relative fixed-top bg-success p-2 shadow">
-            {% block title %}{% endblock %}
-        </div>
-    </header>
+    <div class="position-relative fixed-top bg-success p-2 shadow">
+        {% block title %}{% endblock %}
+    </div>
     
 
     <div class="position-relative mt-2 overflow-scroll">
         {% block content %}{% endblock %}
     </div>
 
-    <div class="fixed-bottom p-2">
+    <div class="position-absolute bottom-0 start-0 p-2 w-100">
         {% block footer %}{% endblock %}
     </div>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
