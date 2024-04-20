@@ -4,7 +4,7 @@
 <div class="d-flex">
     <a class="btn px-1 text-white" href="{{ url_for('main.index') }}">{{ _macros.icon_arrow_left("24", "24") }}</a>
     <div class="flex-grow-1 px-2"><input type="text" class="form-control rounded-4 border-0" placeholder="list name" id="textlistName" value="{{ cur_list.name }}"></div>
-    <div class="btn px-1 text-white" id="btnSettings">{{ _macros.icon_justify("24", "24") }}</div>
+    <button class="btn px-1 text-white" id="btnSettings">{{ _macros.icon_justify("24", "24") }}</button>
 </div>
 <div class="container text-white mt-2 px-5" style="display: none;" id="blockSettings">
     <div class="form-check form-switch">
