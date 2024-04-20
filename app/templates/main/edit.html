@@ -17,7 +17,7 @@
 {% block content %}
 <script>const list_id = "{{ cur_list.id }}"</script>
 
-<div class="container p-0" id="listItemsWrapper">
+<div class="container-fluide p-0" id="listItemsWrapper">
     <div class="list-group list-group-flush" id="listItems">
         {% for list_item in cur_list.items %}
         <div class="list-group-item" dbItemID="{{ list_item.item.id }}" {% if list_item.is_marked == 1 %} style="display: none;" {% endif %}>
