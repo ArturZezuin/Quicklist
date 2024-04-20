@@ -11,10 +11,10 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container p-0" id="listItemsWrapper">
+    <div class="container-fluide p-0" id="listItemsWrapper">
         <div class="list-group list-group-flush overflow-scroll" id="listItems">
         
-            {% if lists %}
+        {% if lists %}
         {% for slist in lists %}
             <div class="list-group-item" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
                 <div class="d-flex">
