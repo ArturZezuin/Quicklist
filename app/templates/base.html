@@ -13,12 +13,15 @@
     <div class="sticky-top bg-success p-2 shadow">
         {% block title %}{% endblock %}
     </div>
+
     <div class="mt-2">
         {% block content %}{% endblock %}
     </div>
+
     <div class="fixed-bottom p-2">
         {% block footer %}{% endblock %}
     </div>
+    
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     {% block scripts %}{% endblock %}  
 </body>
