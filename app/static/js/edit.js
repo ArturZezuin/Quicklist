@@ -139,7 +139,7 @@ function addItemToList(dbItemId, dbItemName){
                     div.setAttribute('dbItemID', dbItemId)
                     div.className = "list-group-item";
                     div.innerHTML = `
-                    <div class="d-flex">
+                    <div class="d-flex fs-3">
                         <div class="px-0"><input class="form-check-input me-1" type="checkbox" value="" id="listCheckbox-` + dbItemId + `"></div>
                         <div class="flex-grow-1 px-2"><label role="button" class="form-check-label" for="listCheckbox-` + dbItemId + `">` + dbItemName + `</label></div>
                         <div role="button" class="deleteListItem">

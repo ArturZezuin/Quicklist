@@ -21,7 +21,7 @@
     <div class="list-group list-group-flush" id="listItems">
         {% for list_item in cur_list.items %}
         <div class="list-group-item" dbItemID="{{ list_item.item.id }}" {% if list_item.is_marked == 1 %} style="display: none;" {% endif %}>
-            <div class="d-flex">
+            <div class="d-flex fs-3">
                 <div class="px-0">
                     <input class="form-check-input me-1" type="checkbox" value="" id="listCheckbox-{{ list_item.item.id }}" {% if list_item.is_marked == 1 %} checked {% endif %}>
                     </div>
