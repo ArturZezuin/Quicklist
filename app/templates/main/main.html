@@ -17,7 +17,7 @@
         {% if lists %}
         {% for slist in lists %}
             <div class="list-group-item" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
-                <div class="d-flex fs-3">
+                <div class="d-flex fs-4">
                     <div class="flex-grow-1 px-3">
                         <a href="{{ url_for('main.list', id=slist.id) }}">{{ slist.name }}</a>
                     </div>
