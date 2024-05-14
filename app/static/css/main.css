@@ -10,5 +10,9 @@
     background-color: #2f3c42;
 }
 
+.form-check-input,.form-check-input:checked{
+    background-color: #4faba2;  
+    border-color: #ffffff;
+}
 
 
