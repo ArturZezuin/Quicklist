@@ -3,7 +3,7 @@
 {% block title %}
 <div class="d-flex">
     <a class="btn px-1 text-white" href="{{ url_for('main.index') }}">{{ _macros.icon_arrow_left("24", "24") }}</a>
-    <div class="flex-grow-1 px-2"><input type="text" class="form-control rounded-4 border-0" placeholder="list name" id="textlistName" value="{{ cur_list.name }}"></div>
+    <div class="flex-grow-1 px-2"><input type="text" class="form-control rounded-2 border-0" placeholder="list name" id="textlistName" value="{{ cur_list.name }}"></div>
     <a class="btn px-1 text-white" id="btnSettings">{{ _macros.icon_justify("24", "24") }}</a>
 </div>
 <div class="container text-white mt-2 px-5" style="display: none;" id="blockSettings">
@@ -17,11 +17,11 @@
 {% block content %}
 <script>const list_id = "{{ cur_list.id }}"</script>
 
-<div class="container-fluide p-0" id="listItemsWrapper">
-    <div class="list-group list-group-flush" id="listItems">
+<div class="container-fluide p-2" id="listItemsWrapper">
+    <div class="list-group" id="listItems">
         {% for list_item in cur_list.items %}
-        <div class="list-group-item" dbItemID="{{ list_item.item.id }}" {% if list_item.is_marked == 1 %} style="display: none;" {% endif %}>
-            <div class="d-flex">
+        <div class="list-group-item bg-3 p-3" dbItemID="{{ list_item.item.id }}" {% if list_item.is_marked == 1 %} style="display: none;" {% endif %}>
+            <div class="d-flex fs-5 text-white">
                 <div class="px-0">
                     <input class="form-check-input me-1" type="checkbox" value="" id="listCheckbox-{{ list_item.item.id }}" {% if list_item.is_marked == 1 %} checked {% endif %}>
                     </div>
@@ -50,7 +50,7 @@
     <div class="list-group" id="listOffers"></div>
 </div>
 
-<input type="text" class="form-control rounded-4 border-1 mb-1 flex-grow-1" placeholder="Start typing here" aria-label="Start typing here" id="searchInput" aria-describedby="btnGroupAddon">
+<input type="text" class="form-control rounded-2 border-1 mb-1 flex-grow-1" placeholder="Start typing here" aria-label="Start typing here" id="searchInput" aria-describedby="btnGroupAddon">
 {% endblock %}  
 
 {% block scripts %}

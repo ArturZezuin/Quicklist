@@ -11,17 +11,17 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluide p-0" id="listItemsWrapper">
-        <div class="list-group list-group-flush" id="listItems">
+    <div class="container-fluide p-2" id="listItemsWrapper">
+        <div class="list-group" id="listItems">
         
         {% if lists %}
         {% for slist in lists %}
-            <div class="list-group-item" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
+            <div class="list-group-item bg-3 p-3" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
                 <div class="d-flex">
-                    <div class="flex-grow-1 px-3">
-                        <a href="{{ url_for('main.list', id=slist.id) }}">{{ slist.name }}</a>
+                    <div class="flex-grow-1">
+                        <a class="link-underline link-underline-opacity-0 text-white fs-5" href="{{ url_for('main.list', id=slist.id) }}">{{ slist.name }}</a>
                     </div>
-                    <div role="button" class="delete_list_item">
+                    <div role="button" class="delete_list_item text-white">
                         {{ _macros.icon_delete("24", "24") }}
                     </div>
                 </div>
@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block footer %}
-    <a class="btn btn-success px-2 fs-5" href="{{ url_for('main.add_list') }}">{{ _macros.icon_plus("24", "24") }} New list</a> 
+    <a class="btn bg-2 px-2 fs-5 text-white" href="{{ url_for('main.add_list') }}">{{ _macros.icon_plus("24", "24") }} New list</a> 
 {% endblock %}  
 
 {% block scripts %}

@@ -137,9 +137,9 @@ function addItemToList(dbItemId, dbItemName){
                 if (results['is_add'] == '1') {
                     let div = document.createElement('div');
                     div.setAttribute('dbItemID', dbItemId)
-                    div.className = "list-group-item";
+                    div.className = "list-group-item bg-3 p-3";
                     div.innerHTML = `
-                    <div class="d-flex">
+                    <div class="d-flex fs-5 text-white">
                         <div class="px-0"><input class="form-check-input me-1" type="checkbox" value="" id="listCheckbox-` + dbItemId + `"></div>
                         <div class="flex-grow-1 px-2"><label role="button" class="form-check-label" for="listCheckbox-` + dbItemId + `">` + dbItemName + `</label></div>
                         <div role="button" class="deleteListItem">
@@ -176,7 +176,7 @@ function addItemToOfferList(textContent, dbItemID){
     div.textContent = textContent;
     div.setAttribute('dbItemID', dbItemID)
     div.setAttribute('role', "button")
-    div.className = "list-group-item list-group-item-action bg-light px-2 py-1";
+    div.className = "list-group-item list-group-item-action bg-light p-2 fs-5";
     listOffers.appendChild(div);  
     listOffersWrapper.style.display = "block";  
 }

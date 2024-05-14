@@ -9,7 +9,7 @@
     }
   ],
   "start_url": "/",
-  "background_color": "#198754",
+  "background_color": "#2f3c42",
   "display": "standalone",
-  "theme_color": "#198754"
+  "theme_color": "#2f3c42"
 }
