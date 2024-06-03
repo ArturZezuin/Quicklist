@@ -3,10 +3,6 @@
 {% block title %}
 <div class="d-flex text-white">
     <h3 class="flex-grow-1 p-0 m-2 flex-grow-1">Gluon.list</h3>
-    <div class="form-check form-switch p-2">
-        <input class="form-check-input" type="checkbox" role="switch" id="checkboxShowComplited">
-        <label class="form-check-label" for="checkboxShowComplited">Show completed</label>
-    </div>
 </div>
 {% endblock %}
 
@@ -16,11 +12,22 @@
         
         {% if lists %}
         {% for slist in lists %}
+
+            {% if slist.is_marked %}
+            <div class="list-group-item bg-4 p-3" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
+            {% else %}
             <div class="list-group-item bg-3 p-3" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
+            {% endif %}
+
                 <div class="d-flex">
                     <div class="flex-grow-1">
+                        {% if slist.is_marked %}
+                        <a class="link-underline link-underline-opacity-0 text_gray fs-5" href="{{ url_for('main.list', id=slist.id) }}">{{ slist.name }}</a>
+                        {% else %}
                         <a class="link-underline link-underline-opacity-0 text-white fs-5" href="{{ url_for('main.list', id=slist.id) }}">{{ slist.name }}</a>
+                        {% endif %}
                     </div>
+
                     <div role="button" class="delete_list_item text-white">
                         {{ _macros.icon_delete("24", "24") }}
                     </div>

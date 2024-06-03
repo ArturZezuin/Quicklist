@@ -19,7 +19,7 @@ def before_request():
 @bp.route('/index')
 @login_required
 def index():
-    lists = m.Shopping_list.query.filter_by(user_id=current_user.id).order_by(sa.desc('id')).all()
+    lists = m.Shopping_list.query.filter_by(user_id=current_user.id).order_by('is_marked').order_by(sa.desc('id')).all()
     return render_template('main/main.html', lists=lists)
 
 @bp.route('/add_list')
