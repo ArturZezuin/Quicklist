@@ -1,13 +1,12 @@
-.bg-4 {background-color: #DEE3E6;}
-.bg-3 {background-color: #4faba2;}
-.bg-2 {background-color: #37474f;}
-.bg-1 {background-color: #2f3c42;}
+.bg-3 {background-color: #DEE3E6;}
+.bg-2 {background-color: #22aaa1;}
+.bg-1 {background-color: #03120E;}
 
 .text_gray {color: #37474f;}
 
-.form-check-input,.form-check-input:checked{
-    background-color: #4faba2;  
-    border-color: #ffffff;
+.logo {
+    color: #dcf9f7;
 }
+
 
 

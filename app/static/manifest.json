@@ -3,13 +3,34 @@
   "name": "Gluon list",
   "icons": [
     {
-      "src": "gluon.png",
+      "src": "gluon_list_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "gluon_list_192.png",
       "type": "image/png",
       "sizes": "192x192"
     }
   ],
   "start_url": "/",
-  "background_color": "#2f3c42",
+  "background_color": "#03120e",
   "display": "standalone",
-  "theme_color": "#2f3c42"
+  "theme_color": "#03120e",
+  "id": "GluonListPWA",
+  "dir": "auto",
+  "scope": "https://list.gluon.ovh",
+  "lang": "en",
+  "orientation": "portrait",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ],
+  "prefer_related_applications": false,
+  "categories": [
+    "food",
+    "productivity",
+    "shopping"
+  ]
 }

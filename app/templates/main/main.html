@@ -2,7 +2,7 @@
 
 {% block title %}
 <div class="d-flex text-white">
-    <h3 class="flex-grow-1 p-0 m-2 flex-grow-1">Gluon.list</h3>
+    <h3 class="flex-grow-1 p-0 m-2 flex-grow-1 logo">Gluon.list</h3>
 </div>
 {% endblock %}
 
@@ -14,9 +14,9 @@
         {% for slist in lists %}
 
             {% if slist.is_marked %}
-            <div class="list-group-item bg-4 p-3" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
-            {% else %}
             <div class="list-group-item bg-3 p-3" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
+            {% else %}
+            <div class="list-group-item bg-2 p-3" dbListId="{{ slist.id }}" isMarked="{{ slist.is_marked }}">
             {% endif %}
 
                 <div class="d-flex">
