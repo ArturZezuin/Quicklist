@@ -1,6 +1,6 @@
 const searchInput = document.getElementById('searchInput');
 const textlistName = document.getElementById('textlistName');
-const checkboxShowMarked = document.getElementById('checkboxShowMarked');
+
 const listOffersWrapper = document.getElementById('listOffersWrapper');
 const listOffers = document.getElementById('listOffers');
 const listItemsWrapper = document.getElementById('listItemsWrapper');
@@ -11,7 +11,7 @@ const btnSettings = document.getElementById('btnSettings');
 
 
 window.onload = function() {
-   showHideListItems();
+   showListItems();
 }
 
 function ShowToast(message) {
@@ -20,6 +20,7 @@ function ShowToast(message) {
     messageToastText.textContent = message;
     toastBootstrap.show();
 }
+
 
 function clearOfferList(){
     listOffers.innerHTML = "";
@@ -31,7 +32,7 @@ function clearSearchInput(){
     searchInput.focus(); 
 }
 
-function showHideListItems(){
+function showListItems(){
     let messageNoItems = document.getElementById('messageNoItems');
     let messageAllMarked = document.getElementById('messageAllMarked');
 
@@ -47,10 +48,15 @@ function showHideListItems(){
                 allItems += 1;
                 let checkbox = children[i].querySelector('.form-check-input');
                 if (checkbox.checked) {allMarkedItems += 1;}
-                if (checkbox.checked && !checkboxShowMarked.checked) {
-                    children[i].style.display = "none";
+                
+                if (checkbox.checked) {
+                    children[i].setAttribute('isMarked', "1");
+                    children[i].classList.add('bg-3');
+                    children[i].classList.remove('bg-2');
                 } else {
-                    children[i].style.display = "block";
+                    children[i].setAttribute('isMarked', "0");
+                    children[i].classList.add('bg-2');
+                    children[i].classList.remove('bg-3');
                 }
             }
         }
@@ -63,18 +69,15 @@ function showHideListItems(){
             listItemsWrapper.appendChild(div);
             listItems.style.display = "none";
 
-        } else if (allMarkedItems == allItems && !checkboxShowMarked.checked) {
-            let div = document.createElement('div');
-            div.id = "messageAllMarked";
-            div.className = "d-flex text-secondary text-center justify-content-center mt-3 px-2";
-            div.textContent = "All items are marked. To see all items, click on Show marked.";
-            listItemsWrapper.appendChild(div);
-            listItems.style.display = "none";
-
         } else {
             listItems.style.display = "block";   
         }
     }
+
+    let listElements = Array.prototype.slice.call(listItems.children);
+    let sortedListElements = listElements.sort((a, b) => (+a.getAttribute("isMarked")) - (+b.getAttribute("isMarked")));
+    listItems.innerHTML = '';
+    sortedListElements.forEach(el => listItems.appendChild(el));
 }
 
 listItems.onclick = function(e) {
@@ -86,7 +89,7 @@ listItems.onclick = function(e) {
                 response.json().then((results) => {
                     if (results['is_delete'] == '1') {
                         document.querySelector('[dbItemID="' + dbItemId + '"]').remove();
-                        showHideListItems();
+                        showListItems();
                     }
                 })
             }
@@ -97,7 +100,7 @@ listItems.onclick = function(e) {
             if (response.status = 200){
                 response.json().then((results) => {
                     if (results['change_marked'] == '1') {
-                        showHideListItems();
+                        showListItems();
                     }
                 })
             }
@@ -105,18 +108,10 @@ listItems.onclick = function(e) {
     }
 }
 
-btnSettings.onclick = function() {
-    blockSettings.style.display = (blockSettings.style.display == "none") ? "block" : "none";
-}
-
 textlistName.onchange = function() {
     let newName = textlistName.value;
     if (newName.length == 0 ) newName = 'New list'; 
     fetch('/change_list_name/' + list_id + '/' + newName);   
-}
-
-checkboxShowMarked.onchange = function() {
-    showHideListItems();   
 }
 
 listOffers.onclick = function(e) {
@@ -131,32 +126,47 @@ listOffers.onclick = function(e) {
 }
 
 function addItemToList(dbItemId, dbItemName){
-    fetch('/add_list_item/' + list_id + '/' + dbItemId).then((response) => {
-        if (response.status = 200){
-            response.json().then((results) => {
-                if (results['is_add'] == '1') {
-                    let div = document.createElement('div');
-                    div.setAttribute('dbItemID', dbItemId)
-                    div.className = "list-group-item bg-3 p-3";
-                    div.innerHTML = `
-                    <div class="d-flex fs-5 text-white">
-                        <div class="px-0"><input class="form-check-input me-1" type="checkbox" value="" id="listCheckbox-` + dbItemId + `"></div>
-                        <div class="flex-grow-1 px-2"><label role="button" class="form-check-label" for="listCheckbox-` + dbItemId + `">` + dbItemName + `</label></div>
-                        <div role="button" class="deleteListItem">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                            </svg> 
-                        </div>
-                    </div>   
-                    `;
-                    listItems.appendChild(div);
-                    showHideListItems();
-                } else {
-                    ShowToast(dbItemName + " is already on the list");
-                }
-            })
+
+    let foundElement = listItems.querySelector('div[dbItemId="' + dbItemId + '"]');
+    if (foundElement == null) {
+        fetch('/add_list_item/' + list_id + '/' + dbItemId).then((response) => {
+            if (response.status = 200){
+                let div = document.createElement('div');
+                div.setAttribute('dbItemID', dbItemId);
+                div.setAttribute('isMarked', "0");
+                div.className = "list-group-item bg-2 p-3";
+                div.innerHTML = `
+                <div class="d-flex fs-5">
+                    <div class="px-0"><input class="form-check-input me-1" type="checkbox" value="" id="listCheckbox-` + dbItemId + `"></div>
+                    <div class="flex-grow-1 px-2"><label role="button" class="form-check-label" for="listCheckbox-` + dbItemId + `">` + dbItemName + `</label></div>
+                    <div role="button" class="deleteListItem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                        </svg> 
+                    </div>
+                </div>   
+                `;
+                listItems.appendChild(div);
+            }    
+        });   
+    } else {
+        let checkbox = foundElement.querySelector('.form-check-input');
+        if (checkbox.checked == false) {
+            ShowToast(dbItemName + " is already on the list");
+        } else {
+            fetch('/mark_list_item/' + list_id + '/' + dbItemId + '/' + 0).then((response) => {
+                if (response.status = 200){
+                    foundElement.setAttribute('isMarked', "0");
+                    foundElement.classList.add('bg-2');
+                    foundElement.classList.remove('bg-3');  
+                    checkbox.checked = false;  
+                }   
+            });      
         }
-    })
+    }
+
+    showListItems();
+
 }
 
 function addNewItem(itemName){

@@ -52,7 +52,7 @@ def delete_list(id):
 @bp.route('/list/<int:id>', methods=['GET', 'POST'])
 @login_required
 def list(id):
-    cur_list = m.Shopping_list.query.get_or_404(id)
+    cur_list = m.Shopping_list.query.order_by('is_marked').get_or_404(id)
     return render_template('main/edit.html', cur_list=cur_list)
 
 @bp.route('/searchitem/<string:strs>', methods=['GET'])

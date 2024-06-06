@@ -19,7 +19,6 @@
   "theme_color": "#03120e",
   "id": "GluonListPWA",
   "dir": "auto",
-  "scope": "https://list.gluon.ovh",
   "lang": "en",
   "orientation": "portrait",
   "display_override": [

@@ -48,7 +48,7 @@ class Shopping_list(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), index=True)
     user: Mapped['User'] = relationship()
 
-    items: Mapped[List['Shopping_list_item']] = relationship(cascade="all")
+    items: Mapped[List['Shopping_list_item']] = relationship(cascade="all", order_by="Shopping_list_item.is_marked")
 
 
 class Shopping_list_item(db.Model):
