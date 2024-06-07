@@ -26,7 +26,12 @@
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <script>
         if (typeof navigator.serviceWorker !== 'undefined') {
-          navigator.serviceWorker.register("{{ url_for('static', filename='js/sw.js') }}")
+            caches.keys().then(function(cacheNames) {
+                cacheNames.forEach(function(cacheName) {
+                caches.delete(cacheName);
+                });
+            });
+            navigator.serviceWorker.register("{{ url_for('static', filename='js/sw.js') }}")
         }
       </script>
     {% block scripts %}{% endblock %}  
