@@ -34,46 +34,34 @@ function clearSearchInput(){
 
 function showListItems(){
     let messageNoItems = document.getElementById('messageNoItems');
-    let messageAllMarked = document.getElementById('messageAllMarked');
-
     if (messageNoItems) { messageNoItems.remove() };
-    if (messageAllMarked) { messageAllMarked.remove() };
 
-    if (listItems.hasChildNodes()) {
-        let allItems = 0;
-        let allMarkedItems = 0;
-        let children = listItems.childNodes;
-        for (let i = 0; i < children.length; ++i) {
-            if (children[i].nodeType == 1) {
-                allItems += 1;
-                let checkbox = children[i].querySelector('.form-check-input');
-                if (checkbox.checked) {allMarkedItems += 1;}
-                
-                if (checkbox.checked) {
-                    children[i].setAttribute('isMarked', "1");
-                    children[i].classList.add('bg-3');
-                    children[i].classList.remove('bg-2');
-                } else {
-                    children[i].setAttribute('isMarked', "0");
-                    children[i].classList.add('bg-2');
-                    children[i].classList.remove('bg-3');
-                }
-            }
-        }
-        
-        if (allItems == 0) {
-            let div = document.createElement('div');
-            div.id = "messageNoItems";
-            div.className = "d-flex text-secondary text-center justify-content-center mt-3 px-2";
-            div.textContent = "There's nothing here yet. Start typing";
-            listItemsWrapper.appendChild(div);
-            listItems.style.display = "none";
+    listItems.style.display = "block"; 
 
-        } else {
-            listItems.style.display = "block";   
-        }
+    let allListItems = listItems.querySelectorAll("div.list-group-item");
+    if (allListItems.length == 0) {
+        let div = document.createElement('div');
+        div.id = "messageNoItems";
+        div.className = "d-flex text-secondary text-center justify-content-center mt-3 px-2";
+        div.textContent = "There's nothing here yet. Start typing";
+        listItemsWrapper.appendChild(div);
+        listItems.style.display = "none";
+        return;
     }
 
+    allListItems.forEach(function (lItem) {
+        let checkbox = lItem.querySelector('.form-check-input');   
+        if (checkbox.checked) {
+            lItem.setAttribute('isMarked', "1");
+            lItem.classList.add('bg-3');
+            lItem.classList.remove('bg-2');
+        } else {
+            lItem.setAttribute('isMarked', "0");
+            lItem.classList.add('bg-2');
+            lItem.classList.remove('bg-3');
+        }
+    });
+  
     let listElements = Array.prototype.slice.call(listItems.children);
     let sortedListElements = listElements.sort((a, b) => (+a.getAttribute("isMarked")) - (+b.getAttribute("isMarked")));
     listItems.innerHTML = '';
@@ -147,6 +135,7 @@ function addItemToList(dbItemId, dbItemName){
                 </div>   
                 `;
                 listItems.appendChild(div);
+                showListItems();
             }    
         });   
     } else {
