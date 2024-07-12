@@ -9,6 +9,10 @@
     border-color: #ffffff;
 }
 
+.list-group {
+    margin-bottom: 50px;
+}
+
 .logo {
     color: #DEE3E6;
 }
