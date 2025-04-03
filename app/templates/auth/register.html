@@ -1,63 +1,65 @@
-{% extends "base_auth.html" %}
+{% extends "base.html" %}
 
 {% block content %}  
-<form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-    <div class="card border-secondary mt-3 shadow">
-        <div class="card-header d-flex">
-            <div class="flex-grow-1">
-                <h5 class="m-0">Register</h5>
+<div class="container mt-3" style="max-width: 500px;">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="card shadow">
+            <div class="card-header d-flex">
+                <div class="flex-grow-1">
+                    <h5 class="m-0">Register</h5>
+                </div>
+                <div>
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                </div>
             </div>
-            <div>
-                <a href="{{ url_for('auth.login') }}">Login</a>
+            <div class="card-body p-2">
+
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+                {% endfor %}  
+                {% endif %}
+                {% endwith %}
+
+                <div class="form-floating mb-2">
+                    {{ form.username(class="form-control") }} 
+                    <label for="username">Name</label>
+                    {% for error in form.username.errors %}
+                    <p class="text-danger"><small>{{ error }}</small></p>
+                    {% endfor %}
+                </div>
+
+                <div class="form-floating mb-2">
+                    {{ form.email(class="form-control") }} 
+                    <label for="email">Email</label>
+                    {% for error in form.email.errors %}
+                    <p class="text-danger"><small>{{ error }}</small></p>
+                    {% endfor %}
+                </div>
+
+                <div class="form-floating mb-2">
+                    {{ form.password(class="form-control") }} 
+                    <label for="password">Password</label>
+                    {% for error in form.password.errors %}
+                    <p class="text-danger"><small>{{ error }}</small></p>
+                    {% endfor %}
+                </div>
+
+                <div class="form-floating">
+                    {{ form.password2(class="form-control") }} 
+                    <label for="password2">Repeat password</label>
+                    {% for error in form.password2.errors %}
+                    <p class="text-danger"><small>{{ error }}</small></p>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="card-footer p-2">
+                {{ form.submit(class="btn btn-warning") }}
             </div>
         </div>
-        <div class="card-body">
-
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-danger" role="alert">{{ message }}</div>
-            {% endfor %}  
-            {% endif %}
-            {% endwith %}
-
-            <div class="form-floating mb-2">
-                {{ form.username(type="email", class="form-control", id="username", placeholder='Email') }} 
-                <label for="username">Name</label>
-                {% for error in form.username.errors %}
-                <p class="text-danger"><small>[{{ error }}]</small></p>
-                {% endfor %}
-            </div>
-
-            <div class="form-floating mb-2">
-                {{ form.email(type="email", class="form-control", id="email", placeholder='Email') }} 
-                <label for="email">Email</label>
-                {% for error in form.email.errors %}
-                <p class="text-danger"><small>[{{ error }}]</small></p>
-                {% endfor %}
-            </div>
-
-            <div class="form-floating mb-2">
-                {{ form.password(type="password", class="form-control", id="password", placeholder='Password') }} 
-                <label for="password">Password</label>
-                {% for error in form.password.errors %}
-                <p class="text-danger"><small>[{{ error }}]</small></p>
-                {% endfor %}
-            </div>
-
-            <div class="form-floating">
-                {{ form.password2(type="password", class="form-control", id="password2", placeholder='Password') }} 
-                <label for="password2">Repeat password</label>
-                {% for error in form.password2.errors %}
-                <p class="text-danger"><small>[{{ error }}]</small></p>
-                {% endfor %}
-            </div>
-
-        </div>
-        <div class="card-footer py-3">
-            {{ form.submit(class="btn btn-outline-secondary w-100") }}
-        </div>
-    </div>
-</form>
+    </form>
+</div>
 {% endblock %}
