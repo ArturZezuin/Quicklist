@@ -16,11 +16,24 @@ def before_request():
         db.session.commit()
 
 @bp.route('/')
-@bp.route('/index')
 @login_required
 def index():
-    lists = m.Shopping_list.query.filter_by(user_id=current_user.id).order_by('is_marked').order_by(sa.desc('id')).all()
-    return render_template('main/main.html', lists=lists)
+    try:
+        lists = m.Shopping_list.query.filter(
+        m.Shopping_list.user_id == current_user.id
+        ).join(m.Shopping_list_item).with_entities(
+            m.Shopping_list,
+            sa.func.count(m.Shopping_list_item.Shopping_list_id).label('item_count') 
+        ).group_by(m.Shopping_list.id).order_by(
+            'is_marked',
+            sa.desc('id')
+        ).all()
+
+        return render_template('main/main.html', lists=lists)
+    
+    except Exception as e:
+        print(e)
+        return render_template('errors/500.html', err=e)
 
 @bp.route('/add_list')
 @login_required
@@ -38,22 +51,33 @@ def change_list_name(id, name):
     return '1'
 
 
-@bp.get('/delete_list/<int:id>')
+@bp.get('/deletelist/<int:id>')
 @login_required
-def delete_list(id):
-    cur_list = m.Shopping_list.query.get_or_404(id)
-    try:
-        db.session.delete(cur_list)
-        db.session.commit()
-        return '1'
-    except:
-        return '0'
+def deletelist(id):
+        
+    f_list = m.Shopping_list.query.filter(
+        m.Shopping_list.user_id == current_user.id, 
+        m.Shopping_list.id == id, 
+    ).order_by(
+        m.Shopping_list.name    
+    ).first_or_404()
 
-@bp.route('/list/<int:id>', methods=['GET', 'POST'])
+    print(f_list)
+
+    try:
+        db.session.delete(f_list)
+        db.session.commit()
+        return redirect(url_for('main.index'))
+    
+    except Exception as e:
+        print(e)
+        return render_template('errors/500.html', err=e)
+
+@bp.get('/list/<int:id>')
 @login_required
 def list(id):
-    cur_list = m.Shopping_list.query.order_by('is_marked').get_or_404(id)
-    return render_template('main/edit.html', cur_list=cur_list)
+    shopping_list = m.Shopping_list.query.order_by('is_marked').get_or_404(id)
+    return render_template('main/edit.html', shopping_list=shopping_list)
 
 @bp.route('/searchitem/<string:strs>', methods=['GET'])
 @login_required

@@ -1,21 +1,5 @@
-.bg-3 {background-color: #DEE3E6;}
-.bg-2 {background-color: #22aaa1; color: white;}
-.bg-1 {background-color: #03120E;}
-
-.text_gray {color: #37474f;}
-
-.form-check-input:checked {
-    background-color: #22aaa1;
-    border-color: #ffffff;
-}
-
-.list-group {
-    margin-bottom: 50px;
-}
-
-.logo {
-    color: #DEE3E6;
-}
+.bg-1 {background-color: #DEE3E6;}
+.bg-2 {background-color: #699a9f; color: white;}
 
 
 

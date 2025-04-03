@@ -11,18 +11,8 @@
 </head>
 <body>
     {% import "macros.html" as _macros %}
-    <div class="sticky-top bg-1 p-2 shadow">
-        {% block title %}{% endblock %}
-    </div>
-
-    <div>
-        {% block content %}{% endblock %}
-    </div>
-
-    <div class="fixed-bottom p-2">
-        {% block footer %}{% endblock %}
-    </div>
-    
+    {% block content %}{% endblock %}
+    {% block footer %}{% endblock %}
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}?v={{ CURRENT_VERSION }}"></script>
     <script>
         if (typeof navigator.serviceWorker !== 'undefined') {
