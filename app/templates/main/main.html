@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-<nav class="navbar bg-body-tertiary mb-3">
-    <div class="container" style="max-width: 800px;">
-        <a class="navbar-brand" href="#">{{ TITLE }}</a>
-        <a class="btn btn-warning" href="{{ url_for('main.add_list') }}">New list</a>
-    </div>
-</nav>
-
-<div class="container" style="max-width: 800px;">
-    {% if lists %}
-        <div class="list-group">
-            {% for list, items_count in lists %}
-            <li class="py-3 list-group-item d-flex justify-content-between align-items-center">
-                <a href="{{ url_for('main.list', id=list.id) }}" class="flex-grow-1 text-decoration-none">{{ list.name }}</a>
-                <div class="d-flex gap-2">
-                    <a href="#"><span class="badge text-bg-light rounded-pill">{{ items_count }}</span></a>
-                    <a href="{{ url_for('main.deletelist', id=list.id) }}"><span class="badge text-bg-danger rounded-pill">X</span></a>
-                </div>
-            </li>   
-            {% endfor %}
+    <nav class="navbar bg-body-tertiary mb-3">
+        <div class="container" style="max-width: 800px;">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">{{ TITLE }}</a>
+            <a class="btn btn-warning" href="{{ url_for('main.addlist') }}">New list</a>
         </div>
-    {% endif %}
-</div>
+    </nav>
+
+    <div class="container" style="max-width: 800px;">
+        {% if lists %}
+            <div class="list-group">
+                {% for list, items_count in lists %}
+                <li class="py-3 list-group-item d-flex justify-content-between align-items-center list-group-item-primary">
+                    <a href="{{ url_for('main.list', id=list.id) }}" class="flex-grow-1 text-decoration-none fs-5">{{ list.title }}</a>
+                    <div class="d-flex gap-2">
+                        <a href="#"><span class="badge text-bg-light rounded-pill">{{ items_count }}</span></a>
+                        <a href="{{ url_for('main.deletelist', id=list.id) }}"><span class="badge text-bg-danger rounded-pill">X</span></a>
+                    </div>
+                </li>   
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

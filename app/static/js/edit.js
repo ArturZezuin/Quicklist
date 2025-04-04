@@ -1,224 +1,245 @@
-const searchInput = document.getElementById('searchInput');
-const textlistName = document.getElementById('textlistName');
+let listID = 0
+let sTimer
+const inputListName = document.getElementById('inputListName');
+const inputSearchProduct = document.getElementById('inputSearchProduct')
+const foundProductList = document.getElementById('foundProductList')
+const listItems = document.getElementById('listItems')
+const addItemModal = document.getElementById('addItemModal')
 
-const listOffersWrapper = document.getElementById('listOffersWrapper');
-const listOffers = document.getElementById('listOffers');
-const listItemsWrapper = document.getElementById('listItemsWrapper');
-const listItems = document.getElementById('listItems');
-const messageToast = document.getElementById('messageToast');
-const blockSettings = document.getElementById('blockSettings');
-const btnSettings = document.getElementById('btnSettings');
+document.addEventListener('DOMContentLoaded', function () {
+    getListId()
+    sortListItems()
+    const list_elements = document.querySelectorAll('[id-list-item]')
+    list_elements.forEach(element => {
+        const element_id = element.getAttribute('id-list-item')
+        element.addEventListener('click', function() {
+            markListItem(element_id)
+        })
+        const span = element.querySelector('span')
+        span.addEventListener('click', function() {
+            deleteListItem(element_id)
+        })
+    })
 
+})
 
-window.onload = function() {
-   showListItems();
-}
+inputListName.addEventListener('change', (event) =>{
+    updateListName()
+})
 
-function ShowToast(message) {
-    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(messageToast);
-    let messageToastText = document.getElementById('messageToastText');
-    messageToastText.textContent = message;
-    toastBootstrap.show();
-}
+addItemModal.addEventListener('show.bs.modal', (event) => {
+    inputSearchProduct.value = ''
+    foundProductList.innerHTML = ''
+})
 
+addItemModal.addEventListener('shown.bs.modal', (event) => {
+    inputSearchProduct.focus()
+})
 
-function clearOfferList(){
-    listOffers.innerHTML = "";
-    listOffersWrapper.style.display = "none";
-}
+inputSearchProduct.addEventListener('input', (event) =>{
+    searchProduct()
+})
 
-function clearSearchInput(){
-    searchInput.value = '';  
-    searchInput.focus(); 
-}
-
-function showListItems(){
-    let messageNoItems = document.getElementById('messageNoItems');
-    if (messageNoItems) { messageNoItems.remove() };
-
-    listItems.style.display = "block"; 
-
-    let allListItems = listItems.querySelectorAll("div.list-group-item");
-    if (allListItems.length == 0) {
-        let div = document.createElement('div');
-        div.id = "messageNoItems";
-        div.className = "d-flex text-secondary text-center justify-content-center mt-3 px-2";
-        div.textContent = "There's nothing here yet. Start typing";
-        listItemsWrapper.appendChild(div);
-        listItems.style.display = "none";
-        return;
-    }
-
-    allListItems.forEach(function (lItem) {
-        let checkbox = lItem.querySelector('.form-check-input');   
-        if (checkbox.checked) {
-            lItem.setAttribute('isMarked', "1");
-            lItem.classList.add('bg-3');
-            lItem.classList.remove('bg-2');
-        } else {
-            lItem.setAttribute('isMarked', "0");
-            lItem.classList.add('bg-2');
-            lItem.classList.remove('bg-3');
-        }
+async function addListItemToDB(id_product, title){
+    const response = await fetch('/addlistitem', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'id_list': listID,
+            'id_product': id_product,
+            'title': title,
+        })
     });
-  
-    let listElements = Array.prototype.slice.call(listItems.children);
-    let sortedListElements = listElements.sort((a, b) => (+a.getAttribute("isMarked")) - (+b.getAttribute("isMarked")));
-    listItems.innerHTML = '';
-    sortedListElements.forEach(el => listItems.appendChild(el));
+
+    if (!response.ok) { throw new Error(`Err (addItemToList): ${response.status} - ${response.error}`) }
+
+    return await response.json()
 }
 
-listItems.onclick = function(e) {
-    let list_item = e.target.closest('.list-group-item');
-    let dbItemId = list_item.getAttribute('dbItemID')
-    if (e.target.closest('.deleteListItem') != null) {
-        fetch('/delete_list_item/' + list_id + '/' + dbItemId).then((response) => {
-            if (response.status = 200){
-                response.json().then((results) => {
-                    if (results['is_delete'] == '1') {
-                        document.querySelector('[dbItemID="' + dbItemId + '"]').remove();
-                        showListItems();
-                    }
-                })
-            }
-        })
-    } else {
-        let checkbox = list_item.querySelector('.form-check-input');
-        fetch('/mark_list_item/' + list_id + '/' + dbItemId + '/' + Number(checkbox.checked)).then((response) => {
-            if (response.status = 200){
-                response.json().then((results) => {
-                    if (results['change_marked'] == '1') {
-                        showListItems();
-                    }
-                })
-            }
-        })
-    }
-}
-
-textlistName.onchange = function() {
-    let newName = textlistName.value;
-    if (newName.length == 0 ) newName = 'New list'; 
-    fetch('/change_list_name/' + list_id + '/' + newName);   
-}
-
-listOffers.onclick = function(e) {
-    let dbItemID = e.target.getAttribute('dbItemID'); 
-    if (dbItemID == '0') {
-        addNewItem(e.target.textContent);
-    }  else {
-        addItemToList(dbItemID, e.target.textContent);
-    }
-    clearOfferList();
-    clearSearchInput();
-}
-
-function addItemToList(dbItemId, dbItemName){
-
-    let foundElement = listItems.querySelector('div[dbItemId="' + dbItemId + '"]');
-    if (foundElement == null) {
-        fetch('/add_list_item/' + list_id + '/' + dbItemId).then((response) => {
-            if (response.status = 200){
-                let div = document.createElement('div');
-                div.setAttribute('dbItemID', dbItemId);
-                div.setAttribute('isMarked', "0");
-                div.className = "list-group-item bg-2 p-3";
-                div.innerHTML = `
-                <div class="d-flex fs-5">
-                    <div class="px-0"><input class="form-check-input me-1" type="checkbox" value="" id="listCheckbox-` + dbItemId + `"></div>
-                    <div class="flex-grow-1 px-2"><label role="button" class="form-check-label" for="listCheckbox-` + dbItemId + `">` + dbItemName + `</label></div>
-                    <div role="button" class="deleteListItem">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                        </svg> 
-                    </div>
-                </div>   
-                `;
-                listItems.appendChild(div);
-                showListItems();
-            }    
-        });   
-    } else {
-        let checkbox = foundElement.querySelector('.form-check-input');
-        if (checkbox.checked == false) {
-            ShowToast(dbItemName + " is already on the list");
+function sortListItems(){
+    const list = document.getElementById('listItems')
+    const items = Array.from(list.getElementsByTagName('li'))
+    items.sort((a, b) => {
+        const markedA = a.getAttribute('is-marked')
+        const markedB = b.getAttribute('is-marked')
+        return markedA - markedB
+    })
+    list.innerHTML = ''
+    items.forEach(item => {
+        const marked = item.getAttribute('is-marked')
+        if(marked == 0) {
+            item.classList.add('list-group-item-primary')
         } else {
-            fetch('/mark_list_item/' + list_id + '/' + dbItemId + '/' + 0).then((response) => {
-                if (response.status = 200){
-                    foundElement.setAttribute('isMarked', "0");
-                    foundElement.classList.add('bg-2');
-                    foundElement.classList.remove('bg-3');  
-                    checkbox.checked = false;  
-                }   
-            });      
+            item.classList.remove('list-group-item-primary')    
         }
-    }
-
-    showListItems();
-
+        list.appendChild(item)
+    })
 }
 
-function addNewItem(itemName){
-    fetch('/add_item/' + itemName).then((response) => {
-        if (response.status = 200){
-            response.json().then((results) => {
-                addItemToList(results['itemId'], itemName.toLowerCase());
-                clearOfferList();
-                clearSearchInput();
-            })
+async function markListItemDB(id, marker) {
+    const response = await fetch('/marklistitem', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({'id':id, 'marker':marker})
+    });
+
+    if (!response.ok) { throw new Error(`Err (marklistitem): ${response.status} - ${response.error}`) }  
+}
+
+function markListItem(list_item_id){
+    let marker
+    const list_element = document.querySelector(`[id-list-item="${list_item_id}"]`)  
+    if(list_element) {
+        const marked = list_element.getAttribute('is-marked')
+        const list_id = list_element.getAttribute('id-list-item')
+        if(marked == 0) {
+            marker = 1
+            list_element.setAttribute('is-marked', marker)
+        } else {
+            marker = 0
+            list_element.setAttribute('is-marked', marker)
         }
-    })  
+        markListItemDB(list_id, marker)
+        sortListItems()
+    } 
 }
 
-function addItemToOfferList(textContent, dbItemID){
-    const div = document.createElement("div");
-    div.textContent = textContent;
-    div.setAttribute('dbItemID', dbItemID)
-    div.setAttribute('role', "button")
-    div.className = "list-group-item list-group-item-action bg-light p-2 fs-5";
-    listOffers.appendChild(div);  
-    listOffersWrapper.style.display = "block";  
-}
+async function deleteListItem(id) {
+    const response = await fetch('/deletelistitem', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(id)
+    });
 
-searchInput.addEventListener('keyup', function(e) {
-    if (searchInput.value.trim() == '') clearOfferList();
+    if (!response.ok) { throw new Error(`Err (deleteListItem): ${response.status} - ${response.error}`) }  
     
-    switch (e.code){
-
-        case 'Enter' || 'NumpadEnter':
-            const itemName = searchInput.value.trim(); 
-            addNewItem(itemName);
-            break;
-
-        case 'Escape':
-            clearOfferList();
-            clearSearchInput();
-            break;
-
-        default:
-            const searchText = e.target.value.trim();
-            let timerId = null;
-            let lastTime = performance.now();
-        
-            if (searchText.length < 3) return;
-            if (timerId) clearTimeout(timerId);
-        
-            timerId = setTimeout(() => {
-                if (performance.now() - lastTime > 3) {
-                    fetch('/searchitem/' + searchText)
-                    .then((response) => response.json())
-                    .then((results) => {
-                        if (results.length > 0) {
-                            clearOfferList();
-                            for (let i = 0; i < results.length; i++) {
-                                addItemToOfferList(results[i][1], results[i][0])
-                            }
-                        } else {
-                            clearOfferList();
-                            addItemToOfferList(searchText, 0)
-                        }
-                    });
-                }
-            }, 500);
+    const list_element = document.querySelector(`[id-list-item="${id}"]`)
+    if (list_element) {
+        list_element.remove()   
     }
-});
+}
+
+async function addProductToList(id, title){
+    result = await addListItemToDB(id, title)
+    if(!result) {
+        console.log('Err (addProductToList)')
+    } else {
+        const list_element = document.querySelector(`[id-list-item="${id}"]`)
+        if (!list_element) {
+            const li = document.createElement('li')
+            const div = document.createElement('div')
+            const span = document.createElement('span')
+            const a = document.createElement('a')
+            li.classList.add('list-group-item', 'list-group-item-action', 'd-flex', 'justify-content-between', 'align-items-center')
+            li.setAttribute('id-list-item', result.list_item_id)
+            li.setAttribute('id-product', result.id_product)
+            li.setAttribute('is-marked', 0)
+            li.style = 'cursor:pointer;'
+            li.addEventListener('click', () => {
+                markListItem(result.list_item_id)
+            })
+            div.classList.add('flex-grow-1', 'fs-5') 
+            div.textContent = title
+            span.classList.add('badge', 'text-bg-danger', 'rounded-pill', 'ms-2') 
+            span.textContent = 'X'
+            span.addEventListener('click', () => {
+                deleteListItem(result.list_item_id)
+            })
+            li.appendChild(div)
+            li.appendChild(span)
+            listItems.appendChild(li)
+        }
+        inputSearchProduct.value = ''
+        inputSearchProduct.focus()
+        sortListItems()
+        markBadge()
+    }
+}
+
+function markBadge() {
+    const elements = document.querySelectorAll('[badge-product-id]');
+    elements.forEach(element => {
+        const element_id = element.getAttribute('badge-product-id')
+        const list_element = document.querySelector(`[id-product="${element_id}"]`) 
+        element.classList.remove('text-bg-success') 
+        element.classList.remove('text-bg-secondary') 
+        if (list_element) {
+            element.classList.add('text-bg-success') 
+        } else {
+            element.classList.add('text-bg-secondary') 
+        }
+    })   
+}
+
+function addBadgeProduct(id, title){
+    const span = document.createElement('span');
+    const element = document.querySelector(`[id-product="${id}"]`)
+    if(element) {
+        span.classList.add('text-bg-success')
+    } else {
+        span.classList.add('text-bg-secondary')
+    }
+    span.classList.add('badge', 'p-2','me-2')
+    span.setAttribute('badge-product-id', id)
+    span.style = 'cursor:pointer;'
+    span.textContent = title;
+    span.onclick = function() { 
+        addProductToList(id, title)
+    }
+    foundProductList.appendChild(span);    
+}
+
+async function searchProduct(){
+    delay(300).then(() => {
+        fetch('/searchproduct', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 'title': inputSearchProduct.value })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Ошибка запроса: ${response.status} - ${response.error}`);
+            }
+            return response.json()
+        })
+        .then(product_list => {
+            foundProductList.innerHTML = '';
+
+            if (product_list.length === 0) {
+                addBadgeProduct(0, inputSearchProduct.value)
+            }
+
+            product_list.forEach(product => {
+                addBadgeProduct(product.id, product.title)
+            });
+        })
+        .catch(error => {
+            console.error('Err (updateListName):', error)
+        });
+    });
+}
+
+async function updateListName(){
+    try {
+        const response = await fetch('/updatelistname', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'id': listID, 'name': inputListName.value})
+        });
+    } catch (error) {
+        console.error('Err (updateListName):', error)
+    }
+}
+
+function getListId(){
+    let url = window.location.pathname;
+    let parts = url.split('/');
+    let number = parts[2];
+    if (!isNaN(number) && number.trim() !== "") {
+        listID = number 
+    }
+}
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
