@@ -1,23 +1,23 @@
 {
-  "short_name": "Gluon.list",
-  "name": "Gluon list",
+  "short_name": "Quick.list",
+  "name": "Quick list",
   "icons": [
     {
-      "src": "gluon_list_512.png",
+      "src": "quick_list_512.png",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "gluon_list_192.png",
+      "src": "quick_list_192.png",
       "type": "image/png",
       "sizes": "192x192"
     }
   ],
   "start_url": "/",
-  "background_color": "#03120e",
+  "background_color": "#fff",
   "display": "standalone",
-  "theme_color": "#03120e",
-  "id": "GluonListPWA",
+  "theme_color": "#fff",
+  "id": "QuickListPWA",
   "dir": "auto",
   "lang": "en",
   "orientation": "portrait",
