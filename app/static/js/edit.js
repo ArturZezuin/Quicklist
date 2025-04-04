@@ -152,9 +152,9 @@ async function addProductToList(id, title){
         }
         foundProductList.innerHTML = ''
         inputSearchProduct.value = ''
-        inputSearchProduct.focus()
         sortListItems()
         markBadge()
+        inputSearchProduct.focus()
     }
 }
 
