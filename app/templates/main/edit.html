@@ -15,7 +15,7 @@
         {% if shopping_list %}
             <div id="listItems" class="list-group">
                 {% for item in shopping_list.list_items %}
-                <li is-marked="{{ item.is_marked }}" id-product="{{ item.product_id }}" id-list-item="{{ item.id }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="cursor: pointer;">
+                <li is-marked="{{ item.is_marked }}" id-product="{{ item.product_id }}" id-list-item="{{ item.id }}" class="list-group-item d-flex justify-content-between align-items-center" style="cursor: pointer;">
                     <div class="flex-grow-1 fs-5">{{ item.product.title }}</div>
                     <a href="#"><span class="badge text-bg-danger rounded-pill ms-2">X</span></a>
                 </li> 

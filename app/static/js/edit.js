@@ -131,7 +131,7 @@ async function addProductToList(id, title){
             const div = document.createElement('div')
             const span = document.createElement('span')
             const a = document.createElement('a')
-            li.classList.add('list-group-item', 'list-group-item-action', 'd-flex', 'justify-content-between', 'align-items-center')
+            li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center')
             li.setAttribute('id-list-item', result.list_item_id)
             li.setAttribute('id-product', result.id_product)
             li.setAttribute('is-marked', 0)
