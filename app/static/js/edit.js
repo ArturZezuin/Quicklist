@@ -101,6 +101,7 @@ function markListItem(list_item_id){
         }
         markListItemDB(list_id, marker)
         sortListItems()
+        list_element.focus()
     } 
 }
 
