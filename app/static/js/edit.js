@@ -150,6 +150,7 @@ async function addProductToList(id, title){
             li.appendChild(span)
             listItems.appendChild(li)
         }
+        foundProductList.innerHTML = ''
         inputSearchProduct.value = ''
         inputSearchProduct.focus()
         sortListItems()
@@ -187,7 +188,7 @@ function addBadgeProduct(id, title){
     span.onclick = function() { 
         addProductToList(id, title)
     }
-    foundProductList.appendChild(span);    
+    foundProductList.appendChild(span)   
 }
 
 async function searchProduct(){
@@ -199,14 +200,14 @@ async function searchProduct(){
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Ошибка запроса: ${response.status} - ${response.error}`);
+                throw new Error(`Ошибка запроса: ${response.status} - ${response.error}`)
             }
             return response.json()
         })
         .then(product_list => {
-            foundProductList.innerHTML = '';
+            foundProductList.innerHTML = ''
 
-            const product = product_list.find(product => product.title === inputSearchProduct.value);
+            const product = product_list.find(product => product.title === inputSearchProduct.value)
             if (!product) {
                 addBadgeProduct(0, inputSearchProduct.value)
             }
