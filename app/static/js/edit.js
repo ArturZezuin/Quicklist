@@ -180,7 +180,7 @@ function addBadgeProduct(id, title){
     } else {
         span.classList.add('text-bg-secondary')
     }
-    span.classList.add('badge', 'p-2','me-2')
+    span.classList.add('badge', 'p-3','m-1')
     span.setAttribute('badge-product-id', id)
     span.style = 'cursor:pointer;'
     span.textContent = title;
@@ -206,7 +206,8 @@ async function searchProduct(){
         .then(product_list => {
             foundProductList.innerHTML = '';
 
-            if (product_list.length === 0) {
+            const product = product_list.find(product => product.title === inputSearchProduct.value);
+            if (!product) {
                 addBadgeProduct(0, inputSearchProduct.value)
             }
 
