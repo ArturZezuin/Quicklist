@@ -7,6 +7,12 @@
     color: #2c7be5;
 }
 
+.navbar-QL {
+    background-color: #fff;
+    border-bottom: #b9d5fe 1px solid;
+}
+
+
 input {
     font-size: 16px;
 }

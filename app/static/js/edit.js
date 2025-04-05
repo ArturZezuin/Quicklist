@@ -4,7 +4,6 @@ const inputListName = document.getElementById('inputListName');
 const inputSearchProduct = document.getElementById('inputSearchProduct')
 const foundProductList = document.getElementById('foundProductList')
 const listItems = document.getElementById('listItems')
-const addItemModal = document.getElementById('addItemModal')
 
 document.addEventListener('DOMContentLoaded', function () {
     getListId()
@@ -27,14 +26,8 @@ inputListName.addEventListener('change', (event) =>{
     updateListName()
 })
 
-addItemModal.addEventListener('show.bs.modal', (event) => {
-    inputSearchProduct.value = ''
-    foundProductList.innerHTML = ''
-})
 
-addItemModal.addEventListener('shown.bs.modal', (event) => {
-    inputSearchProduct.focus()
-})
+
 
 inputSearchProduct.addEventListener('input', (event) =>{
     searchProduct()
@@ -161,7 +154,7 @@ async function addProductToList(id, title){
             }
             li.appendChild(div)
             li.appendChild(span)
-            listItems.appendChild(li)
+            listItems.prepend(li)
         }
         sortListItems()
         markBadge()
@@ -196,7 +189,7 @@ function addBadgeProduct(id, title){
     } else {
         span.classList.add('text-bg-secondary')
     }
-    span.classList.add('badge', 'p-3','m-1')
+    span.classList.add('badge', 'p-2','m-1')
     span.setAttribute('badge-product-id', id)
     span.style = 'cursor:pointer;'
     span.textContent = title
