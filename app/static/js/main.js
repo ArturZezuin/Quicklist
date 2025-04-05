@@ -15,6 +15,7 @@ addListModal.addEventListener('shown.bs.modal', function () {
     const input = document.getElementById('inputListName');
     setTimeout(function() {
       input.focus()
+      input.click()
     }, 200)
 })
 
