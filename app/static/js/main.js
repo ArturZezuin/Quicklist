@@ -1,4 +1,6 @@
 
+document.body.ontouchend = function() { document.getElementById('inputListName').focus() }
+
 document.addEventListener('DOMContentLoaded', function () {
     const list_elements = document.querySelectorAll('.list-delete-button') 
     list_elements.forEach(element => {
@@ -10,14 +12,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 })
 
-const addListModal = document.getElementById('addListModal');
-addListModal.addEventListener('shown.bs.modal', function () {
-    const input = document.getElementById('inputListName');
-    setTimeout(function() {
-      input.focus()
-      input.click()
-    }, 200)
-})
+// const addListModal = document.getElementById('addListModal');
+// addListModal.addEventListener('shown.bs.modal', function () {
+//     const input = document.getElementById('inputListName');
+    
+//     // setTimeout(function() {
+//     //   input.focus()
+//     //   input.click()
+//     // }, 200)
+// })
 
 
 // async function addNewList(){
