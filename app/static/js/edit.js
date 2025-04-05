@@ -160,9 +160,8 @@ async function addProductToList(id, title){
         markBadge()
         foundProductList.innerHTML = ''
         inputSearchProduct.value = ''
-        setTimeout(function() {
-            inputSearchProduct.focus()
-        }, 100)
+        await delay(100)
+        inputSearchProduct.focus()
     }
 }
 
