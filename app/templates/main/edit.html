@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-    <nav class="navbar navbar-QL mb-2">
+    <nav class="navbar bg-body-tertiary navbar-QL mb-2">
         <div class="container" style="max-width: 800px;">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <!-- <a class="navbar-brand d-flex" href="{{ url_for('main.index') }}">{{ TITLE }}</a> -->
                 <div class="flex-grow-1 fs-5">{{ shopping_list.title }}</div>
-                <input id="inputListName" type="text" class="form-control flex-grow-1 visually-hidden" value="{{ shopping_list.title }}">
                 <a class="btn btn-warning d-flex ms-2" href="{{ url_for('main.index') }}">Close</a>
             </div>
         </div>
@@ -30,8 +29,6 @@
             </div>
         {% endif %}
     </div>
-
-
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/edit.js') }}?v={{ CURRENT_VERSION }}"></script>

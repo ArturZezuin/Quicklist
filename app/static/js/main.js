@@ -7,7 +7,30 @@ document.addEventListener('DOMContentLoaded', function () {
             deleteList(id_list)
         })
     })
+
 })
+
+const addListModal = document.getElementById('addListModal');
+addListModal.addEventListener('shown.bs.modal', function () {
+    const input = document.getElementById('inputListName');
+    setTimeout(function() {
+      input.focus()
+    }, 200)
+})
+
+
+// async function addNewList(){
+//     try {
+//         const response = await fetch('/updatelistname', {
+//             method: 'PATCH',
+//             headers: {'Content-Type': 'application/json'},
+//             body: JSON.stringify({'id': listID, 'name': inputListName.value})
+//         })
+//     return await response.json()
+//     } catch (error) {
+//         console.error('Err (updateListName):', error)
+//     }
+// }
 
 async function deleteList(id_list){
     const response = await fetch('/deletelist', {

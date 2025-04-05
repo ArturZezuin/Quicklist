@@ -55,11 +55,12 @@ def list(id):
     except Exception as e:
         return render_template('errors/500.html', err=e)
     
-@bp.route('/addlist')
+@bp.post('/addlist')
 @login_required
 def addlist():
     try:
-        new_list = Shoppinglist(title='New list', date=datetime.now(), user_id=current_user.id)
+        new_title = request.form.get('title')
+        new_list = Shoppinglist(title=new_title, date=datetime.now(), user_id=current_user.id)
         db.session.add(new_list)
         db.session.commit()
 

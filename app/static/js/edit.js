@@ -1,6 +1,5 @@
 let listID = 0
 let sTimer
-const inputListName = document.getElementById('inputListName');
 const inputSearchProduct = document.getElementById('inputSearchProduct')
 const foundProductList = document.getElementById('foundProductList')
 const listItems = document.getElementById('listItems')
@@ -21,13 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
 })
-
-inputListName.addEventListener('change', (event) =>{
-    updateListName()
-})
-
-
-
 
 inputSearchProduct.addEventListener('input', (event) =>{
     searchProduct()
@@ -230,19 +222,6 @@ async function searchProduct() {
         if (error.name !== 'AbortError') {
             console.error('Err (searchProduct):', error)
         }
-    }
-}
-
-async function updateListName(){
-    try {
-        const response = await fetch('/updatelistname', {
-            method: 'PATCH',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({'id': listID, 'name': inputListName.value})
-        })
-    return await response.json()
-    } catch (error) {
-        console.error('Err (updateListName):', error)
     }
 }
 

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-    <nav class="navbar bg-body-tertiary mb-3">
+    <nav class="navbar bg-body-tertiary mb-3 navbar-QL">
         <div class="container" style="max-width: 800px;">
             <a class="navbar-brand" href="{{ url_for('main.index') }}">{{ TITLE }}</a>
-            <a class="btn btn-warning" href="{{ url_for('main.addlist') }}">New list</a>
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addListModal">New list</button>
         </div>
     </nav>
 
@@ -22,6 +22,22 @@
             </div>
         {% endif %}
     </div>
+
+    <div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="selectContractorLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <form action="{{ url_for('main.addlist') }}" method="post">
+                    <div class="modal-body">
+                        <h5 class="modal-title mb-2" id="selectContractorLabel">Add list</h5>
+                        <input id="inputListName" name="title" type="text" class="form-control mb-3" placeholder="Enter List name">      
+                        <button type="submit" class="btn btn-warning">New list</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/main.js') }}?v={{ CURRENT_VERSION }}"></script>
