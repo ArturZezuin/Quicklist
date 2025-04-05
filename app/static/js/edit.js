@@ -40,25 +40,6 @@ inputSearchProduct.addEventListener('input', (event) =>{
     searchProduct()
 })
 
-async function addListItemToDB(id_product, title){
-    const response = await fetch('/addlistitem', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            'id_list': listID,
-            'id_product': id_product,
-            'title': title,
-        })
-    });
-
-    if (!response.ok){
-        const errorMessage = await response.text();
-        throw new Error(`Err (addItemToList): ${response.status} - ${errorMessage}`)
-    }
-
-    return await response.json()
-}
-
 function sortListItems(){
     const list = document.getElementById('listItems')
     const items = Array.from(list.getElementsByTagName('li'))
@@ -131,32 +112,53 @@ async function deleteListItem(id) {
     }
 }
 
+async function addListItemToDB(id_product, title){
+    const response = await fetch('/addlistitem', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'id_list': listID,
+            'id_product': id_product,
+            'title': title,
+        })
+    });
+
+    if (!response.ok){
+        const errorMessage = await response.text();
+        throw new Error(`Err (addItemToList): ${response.status} - ${errorMessage}`)
+    }
+
+    return await response.json()
+}
+
 async function addProductToList(id, title){
     result = await addListItemToDB(id, title)
     if(!result) {
         console.log('Err (addProductToList)')
     } else {
-        const list_element = document.querySelector(`[id-list-item="${id}"]`)
+        let list_item_id = result.list_item_id
+        let id_product = result.id_product
+        const list_element = document.querySelector(`[id-list-item="${list_item_id}"]`)
         if (!list_element) {
             const li = document.createElement('li')
             const div = document.createElement('div')
             const span = document.createElement('span')
             const a = document.createElement('a')
             li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center')
-            li.setAttribute('id-list-item', result.list_item_id)
-            li.setAttribute('id-product', result.id_product)
+            li.setAttribute('id-list-item', list_item_id)
+            li.setAttribute('id-product', id_product)
             li.setAttribute('is-marked', 0)
             li.style = 'cursor:pointer;'
-            li.addEventListener('click', () => {
-                markListItem(result.list_item_id)
-            })
+            li.onclick = function() {
+                markListItem(list_item_id); 
+            }
             div.classList.add('flex-grow-1', 'fs-5') 
             div.textContent = title
             span.classList.add('badge', 'text-bg-danger', 'rounded-pill', 'ms-2') 
             span.textContent = 'X'
-            span.addEventListener('click', () => {
-                deleteListItem(result.list_item_id)
-            })
+            span.onclick = function() {
+                deleteListItem(list_item_id); 
+            }
             li.appendChild(div)
             li.appendChild(span)
             listItems.appendChild(li)
@@ -195,7 +197,7 @@ function addBadgeProduct(id, title){
     span.classList.add('badge', 'p-3','m-1')
     span.setAttribute('badge-product-id', id)
     span.style = 'cursor:pointer;'
-    span.textContent = title;
+    span.textContent = title
     span.onclick = function() { 
         addProductToList(id, title)
     }
