@@ -163,11 +163,13 @@ async function addProductToList(id, title){
             li.appendChild(span)
             listItems.appendChild(li)
         }
-        foundProductList.innerHTML = ''
-        inputSearchProduct.value = ''
         sortListItems()
         markBadge()
-        inputSearchProduct.focus()
+        foundProductList.innerHTML = ''
+        inputSearchProduct.value = ''
+        setTimeout(function() {
+            inputSearchProduct.focus()
+        }, 100)
     }
 }
 
