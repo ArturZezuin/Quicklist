@@ -51,7 +51,10 @@ async function addListItemToDB(id_product, title){
         })
     });
 
-    if (!response.ok) { throw new Error(`Err (addItemToList): ${response.status} - ${response.error}`) }
+    if (!response.ok){
+        const errorMessage = await response.text();
+        throw new Error(`Err (addItemToList): ${response.status} - ${errorMessage}`)
+    }
 
     return await response.json()
 }
@@ -62,7 +65,7 @@ function sortListItems(){
     items.sort((a, b) => {
         const markedA = a.getAttribute('is-marked')
         const markedB = b.getAttribute('is-marked')
-        return markedA - markedB
+        return Number(markedA) - Number(markedB)
     })
     list.innerHTML = ''
     items.forEach(item => {
@@ -78,15 +81,20 @@ function sortListItems(){
 
 async function markListItemDB(id, marker) {
     const response = await fetch('/marklistitem', {
-        method: 'POST',
+        method: 'PATCH',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({'id':id, 'marker':marker})
     });
 
-    if (!response.ok) { throw new Error(`Err (marklistitem): ${response.status} - ${response.error}`) }  
+    if (!response.ok){
+        const errorMessage = await response.text();
+        throw new Error(`Err (markListItemDB): ${response.status} - ${errorMessage}`)
+    }
+
+    return await response.json()
 }
 
-function markListItem(list_item_id){
+async function markListItem(list_item_id){
     let marker
     const list_element = document.querySelector(`[id-list-item="${list_item_id}"]`)  
     if(list_element) {
@@ -99,7 +107,7 @@ function markListItem(list_item_id){
             marker = 0
             list_element.setAttribute('is-marked', marker)
         }
-        markListItemDB(list_id, marker)
+        await markListItemDB(list_id, marker)
         sortListItems()
         list_element.focus()
     } 
@@ -107,12 +115,15 @@ function markListItem(list_item_id){
 
 async function deleteListItem(id) {
     const response = await fetch('/deletelistitem', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(id)
-    });
+    })
 
-    if (!response.ok) { throw new Error(`Err (deleteListItem): ${response.status} - ${response.error}`) }  
+    if (!response.ok){
+        const errorMessage = await response.text();
+        throw new Error(`Err (deleteListItem): ${response.status} - ${errorMessage}`)
+    }
     
     const list_element = document.querySelector(`[id-list-item="${id}"]`)
     if (list_element) {
@@ -191,44 +202,49 @@ function addBadgeProduct(id, title){
     foundProductList.appendChild(span)   
 }
 
-async function searchProduct(){
-    delay(300).then(() => {
-        fetch('/searchproduct', {
+let controller
+async function searchProduct() {
+    if (controller) controller.abort()
+    controller = new AbortController()
+
+    try {
+        const response = await fetch('/searchproduct', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 'title': inputSearchProduct.value })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Ошибка запроса: ${response.status} - ${response.error}`)
-            }
-            return response.json()
-        })
-        .then(product_list => {
-            foundProductList.innerHTML = ''
-
-            const product = product_list.find(product => product.title === inputSearchProduct.value)
-            if (!product) {
-                addBadgeProduct(0, inputSearchProduct.value)
-            }
-
-            product_list.forEach(product => {
-                addBadgeProduct(product.id, product.title)
-            });
-        })
-        .catch(error => {
-            console.error('Err (updateListName):', error)
+            body: JSON.stringify({ 'title': inputSearchProduct.value }),
+            signal: controller.signal
         });
-    });
+
+        if (!response.ok) {
+            throw new Error(`Err: ${response.status}`)
+        }
+
+        const product_list = await response.json()
+        foundProductList.innerHTML = ''
+
+        const product = product_list.find(product => product.title === inputSearchProduct.value)
+        if (!product) {
+            addBadgeProduct(0, inputSearchProduct.value)
+        }
+
+        product_list.forEach(product => {
+            addBadgeProduct(product.id, product.title)
+        });
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            console.error('Err (searchProduct):', error)
+        }
+    }
 }
 
 async function updateListName(){
     try {
         const response = await fetch('/updatelistname', {
-            method: 'POST',
+            method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({'id': listID, 'name': inputListName.value})
-        });
+        })
+    return await response.json()
     } catch (error) {
         console.error('Err (updateListName):', error)
     }

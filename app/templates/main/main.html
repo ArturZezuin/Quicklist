@@ -11,11 +11,11 @@
         {% if lists %}
             <div class="list-group">
                 {% for list, items_count in lists %}
-                <li class="py-3 list-group-item d-flex justify-content-between align-items-center list-group-item-primary">
+                <li id-list="{{ list.id }}" class="py-3 list-group-item d-flex justify-content-between align-items-center list-group-item-primary">
                     <a href="{{ url_for('main.list', id=list.id) }}" class="flex-grow-1 text-decoration-none fs-5">{{ list.title }}</a>
                     <div class="d-flex gap-2">
-                        <a href="#"><span class="badge text-bg-light rounded-pill">{{ items_count }}</span></a>
-                        <a href="{{ url_for('main.deletelist', id=list.id) }}"><span class="badge text-bg-danger rounded-pill">X</span></a>
+                        <span class="badge text-bg-light rounded-pill">{{ items_count }}</span>
+                        <span id-list="{{ list.id }}" class="badge text-bg-danger rounded-pill list-delete-button" style="cursor: pointer;">X</span>
                     </div>
                 </li>   
                 {% endfor %}
@@ -23,3 +23,7 @@
         {% endif %}
     </div>
 {% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/main.js') }}?v={{ CURRENT_VERSION }}"></script>
+{% endblock %}
+

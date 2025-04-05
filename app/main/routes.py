@@ -36,8 +36,6 @@ def index():
             sa.desc(Shoppinglist.id) 
         ).all()
 
-        print(lists)
-
         return render_template('main/main.html', lists=lists)
     
     except Exception as e:
@@ -71,7 +69,7 @@ def addlist():
     except Exception as e:
         return render_template('errors/500.html', err=e)
 
-@bp.post('/updatelistname')
+@bp.patch('/updatelistname')
 @login_required
 def updatelistname():
     try:
@@ -91,26 +89,27 @@ def updatelistname():
     except Exception as e:
         return jsonify({"Err (updateLIstName)": e}), 200
     
-@bp.get('/deletelist/<int:id>')
+@bp.delete('/deletelist')
 @login_required
-def deletelist(id):
-        
-    f_list = Shoppinglist.query.filter(
-        Shoppinglist.user_id == current_user.id, 
-       Shoppinglist.id == id, 
-    ).order_by(
-        Shoppinglist.title    
-    ).first_or_404()
+def deletelist():
 
-    print(f_list)
+    data = request.get_json()
+    id = data.get('id')
+    if not id:
+        return jsonify({"message": "ID not provided"}), 400
 
     try:
+        f_list = Shoppinglist.query.filter(
+            Shoppinglist.user_id == current_user.id, 
+        Shoppinglist.id == id, 
+        ).order_by(
+            Shoppinglist.title    
+        ).first()
         db.session.delete(f_list)
         db.session.commit()
-        return redirect(url_for('main.index'))
+        return jsonify({"message": "List deleted successfully"}), 200
     
     except Exception as e:
-        print(e)
         return render_template('errors/500.html', err=e)
 
 
@@ -125,8 +124,6 @@ def searchproduct():
             f_products = Product.query.filter(
                 Product.title.like(f'%{title.lower()}%')
             ).limit(20).all()
-
-            print(f_products)
 
         result_list = [{
             "id": item.id,
@@ -182,18 +179,16 @@ def addlistitem():
     except Exception as e:
         return jsonify({'Err (addlistitem)': e}), 404
     
-@bp.post('/marklistitem')
+@bp.patch('/marklistitem')
 @login_required
 def marklistitem():
     try:    
         data = request.get_json()
         id = data.get('id')
         marker = data.get('marker')
-        print(id)
-        print(marker)
         if id:
             f_list_item = ShoppinglistItem.query.filter(
-                ShoppinglistItem.id == id    
+                ShoppinglistItem.id == int(id)    
             ).first()
 
             if f_list_item:
@@ -206,14 +201,14 @@ def marklistitem():
         return jsonify({'Err (addlistitem)': e}), 404
 
 
-@bp.post('/deletelistitem')
+@bp.delete('/deletelistitem')
 @login_required
 def deletelistitem():
     try:    
         id = request.get_json()
         if id:
             f_list_item = ShoppinglistItem.query.filter(
-                ShoppinglistItem.id == id    
+                ShoppinglistItem.id == int(id)    
             ).first()
 
             if f_list_item:

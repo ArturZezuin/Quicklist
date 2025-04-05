@@ -18,3 +18,8 @@ input {
 .list-group-item-primary{
     color: #1564da;
 }
+
+.text-bg-danger {
+    background-color: #ffe0db !important;
+    color: #fa472c !important;
+}
